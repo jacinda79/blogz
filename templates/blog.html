@@ -1,0 +1,18 @@
+{% extends "base.html" %}
+
+{% block content %}
+    <h2>All the things she said...</h2>
+
+    {% if blogs|length == 0 %}
+    <p>No posts yet!</p>
+    {% else %}
+
+        {% for blog in blogs %}<p></p>
+        {{blog.title}} | {{blog.date}}
+        {{blog.content}}
+        <h2>*~*~*~*~*~*~*~*~*~*~*~*~*~*~*~*~*~*~*~*~*</h2>
+            {% endfor %}
+        
+    {% endif %}
+
+{% endblock %}

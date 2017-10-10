@@ -1,0 +1,16 @@
+{% extends "base.html" %}
+
+{% block content %}
+    <h2>Add new post...</h2>
+    <form method='post'>
+        <label>
+            Title: <input type="text" name='title' /> | Date: <input type="date" name='date' /><p></p>
+            What's on your mind?
+            <input type="textarea" name='content' />
+        </label>
+        <input type="submit" value='Publish' />
+    </form>
+
+    <hr />
+
+{% endblock %}
