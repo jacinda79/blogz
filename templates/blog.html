@@ -7,8 +7,8 @@
     <p>No posts yet!</p>
     {% else %}
 
-        {% for blog in blogs %}<p></p>
-        {{blog.title}} | {{blog.date}}
+        {% for blog in blogs %}
+        {{blog.title}} | {{blog.date}}<p></p>
         {{blog.content}}
         <h2>*~*~*~*~*~*~*~*~*~*~*~*~*~*~*~*~*~*~*~*~*</h2>
             {% endfor %}
