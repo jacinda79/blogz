@@ -34,24 +34,28 @@ def addnew():
         blog_title = request.form['title']
         blog_date = request.form['date']
         blog_content = request.form['content']
-        blog = Blog(blog_title, blog_date, blog_content)
 
         if len(blog_title) < 1 or len(blog_content) < 1:
             flash("Title and content are required!")
             return redirect('/addnew')
 
+        blog = Blog(blog_title, blog_date, blog_content)
         db.session.add(blog)
         db.session.commit()
-        return redirect('/blog')
-
+        
     else:
         return render_template('addnew.html')
 
-@app.route('/blog', methods=['POST', 'GET'])
-def blog():    
-    blogs = Blog.query.all()
-    return render_template('blog.html',title="Blog Posts", 
-        blogs=blogs)
+@app.route('/blog', methods=['GET', 'POST'])
+def blog():
+    entry_id = request.args.get('id')
+    
+    if (entry_id):
+        entry = Blog.query.get(entry_id)
+        return render_template('blog_entry.html', title="Blog Entry", entry=entry)
 
+    else:
+        blogs = Blog.query.all()
+    return render_template('blog.html', title="Blog Posts", blogs=blogs)
 if __name__ == '__main__':
     app.run()
