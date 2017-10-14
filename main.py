@@ -31,17 +31,19 @@ def index():
 @app.route('/addnew', methods=['POST', 'GET'])
 def addnew():
     if request.method == 'POST':
-        blog_title = request.form['title']
-        blog_date = request.form['date']
-        blog_content = request.form['content']
+        entry_title = request.form['title']
+        entry_date = request.form['date']
+        entry_content = request.form['content']
 
-        if len(blog_title) < 1 or len(blog_content) < 1:
+        if len(entry_title) < 1 or len(entry_content) < 1:
             flash("Title and content are required!")
             return redirect('/addnew')
 
-        blog = Blog(blog_title, blog_date, blog_content)
-        db.session.add(blog)
+        entry = Blog(entry_title, entry_date, entry_content)
+        db.session.add(entry)
         db.session.commit()
+
+        return render_template('blog_entry.html', title="Blog Entry", entry=entry)
         
     else:
         return render_template('addnew.html')
