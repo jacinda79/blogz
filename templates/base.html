@@ -1,11 +1,18 @@
 <!doctype html>
 <html>
     <head>
+        <link rel="stylesheet" href="{{ url_for('static', filename='styles/normalize.css') }}">
+        <link rel="stylesheet" href="{{ url_for('static', filename='styles/styles.css') }}">
         <title>{{title}}</title>
     </head>
 <body>
-<a href="/">Home</a> | <a href="/addnew">Add New Post</a> | <a href="/blog">Blog</a><br>
+        <div class="sidenav">
+            <a href="/">Home</a>
+            <a href="/addnew">Add New</a>
+            <a href="/blog">Blog</a>
+        </div>
 
+        <div class="content">                
 {% with messages = get_flashed_messages() %}
 {% if messages %}
   <ul class=flashes>
@@ -18,6 +25,7 @@
 
     {% block content %}
     {% endblock %}
-
+        </div>
+            
 </body>
 </html>

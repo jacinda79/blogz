@@ -1,0 +1,53 @@
+* {
+    box-sizing: border-box;
+}
+
+body {
+    margin: 0;
+    font-family: "Arial", sans-serif;
+    background-color: #ddd;
+}
+
+.sidenav {
+    height: 100%;
+    width: 200px;
+    position: fixed;
+    z-index: 1;
+    top: 0;
+    left: 0;
+    background-color: teal;
+    overflow-x: hidden;
+}
+
+.sidenav a {
+    color: #ddd;
+    padding: 16px;
+    text-decoration: none;
+    display: block;
+}
+
+.sidenav a:hover {
+    background-color: turquoise;
+    color: #303030;
+}
+
+.content {
+    margin-left: 200px;
+    padding-left: 20px;
+    margin-top: 25px;
+    color: #303030;
+}
+
+.blogtitle {
+    font-size: 20px;
+    color: teal;
+}
+
+h3 {
+    font-size: 20px;
+    color: teal;
+}
+
+h4 {
+    color: crimson;
+}
