@@ -2,12 +2,12 @@
 
 {% block content %}
     <h2>Add new post...</h2>
-    <form method='post'>
+    <form methods='post'>
         <label>
-            Title: <input type="text" name='title' /> Date: <input type="date" name='date' /><p></p>
-            What's on your mind?
-            <input type="textarea" name='content' />
-        </label>
+            Title: <input type="text" name='title' /> Date: <input placeholder="mm/dd/yyyy" type="date" name='date'><p></p>
+        What's on your mind?
+            <input type="textarea" name='content' /></label><p></p>
+        
         <input type="submit" value='Publish' />
     </form>
 
