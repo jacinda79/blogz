@@ -9,7 +9,7 @@
 
         {% for blog in blogs %}
         <a href="blog?id={{blog.id}}/" class="blogtitle">{{blog.title}}</a><p></p>
-        Posted: {{blog.date}}<p></p>
+        Posted: {{blog.date}} By: {{blog.owner}}<p></p>
         {{blog.content}}
         <h4>*~*~*~*~*~*~*~*~*~*~*</h4>
             {% endfor %}
