@@ -3,7 +3,7 @@ from flask_sqlalchemy import SQLAlchemy
 
 app = Flask(__name__)
 app.config['DEBUG'] = True
-app.config['SQLALCHEMY_DATABASE_URI'] = 'mysql+pymysql://root:root@localhost:3306/blogz'
+app.config['SQLALCHEMY_DATABASE_URI'] = 'mysql+pymysql://blogz:blogz@localhost:5355/blogz'
 app.config['SQLALCHEMY_ECHO'] = True
 db = SQLAlchemy(app)
 app.secret_key = 'r44uifgstt8o'
@@ -12,7 +12,7 @@ class Blog(db.Model):
 
     id = db.Column(db.Integer, primary_key=True)
     title = db.Column(db.String(120))
-    date = db.Column(db.String(10))
+    date = db.Column(db.Date)
     content = db.Column(db.String(50000))
     owner_id = db.Column(db.Integer, db.ForeignKey('user.id'))
 
@@ -44,7 +44,11 @@ def require_login():
 
 @app.route('/', methods=['POST', 'GET'])
 def index():
-    return render_template('index.html',title="Blogz")
+    blogs = Blog.query.all()
+    welcome = "Not logged in"
+    if 'username' in session:
+        welcome = "Logged in as: " + session['username']
+    return render_template('index.html', title="blogz", blogs=blogs, welcome=welcome)
 
 @app.route('/login', methods=['POST', 'GET'])
 def login():
@@ -72,7 +76,7 @@ def signup():
         verify = request.form['verify']
         if not username or not password:
             flash('All fields are required', 'error')
-        if len(username) or len(password) < 3:
+        if len(username) < 3 or len(password) < 3:
             flash('Usernames and passwords must contain at least 3 characters', 'error')
         if password != verify:
             flash('Passwords must match', 'error')

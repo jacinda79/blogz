@@ -2,5 +2,19 @@
 
 {% block content %}
     <h2>Blogz</h2>
-    Eventually this will be a welcome screen, but for now it's, well, not.
-{% endblock %}
+    Welcome! Sign up to create your own blog and share your genius with the world!
+<br>
+    Prefer to dip a toe in first? Take a look at the content by other Blogz authors.
+
+    {% if blogs|length == 0 %}
+    <p>No contributors yet!</p>
+    {% else %}
+
+        {% for blog in blogs %}
+        <br><br>
+        <a href="?user=userId/" class="blogtitle">{{User.username}}</a>
+            {% endfor %}
+        
+    {% endif %}
+
+    {% endblock %}
