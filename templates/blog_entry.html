@@ -2,8 +2,10 @@
 
 {% block content %}
 
-<h3>{{blog.title}}</h3><p></p>
-Posted: {{blog.date}}<p></p>
-{{blog.content}}
+<ul>
+    <h3>{{blog.title}}</h3>    
+    <p>{{blog.content}}</p>
+                <sub>Published on: {{blog.date}}</sub>
+</ul>
 
 {% endblock %}
