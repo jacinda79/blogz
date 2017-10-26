@@ -3,7 +3,7 @@ from flask_sqlalchemy import SQLAlchemy
 
 app = Flask(__name__)
 app.config['DEBUG'] = True
-app.config['SQLALCHEMY_DATABASE_URI'] = 'mysql+pymysql://blogz:blogz@localhost:5355/blogz'
+app.config['SQLALCHEMY_DATABASE_URI'] = 'mysql+pymysql://blogz:blogz@localhost:3306/blogz'
 app.config['SQLALCHEMY_ECHO'] = True
 db = SQLAlchemy(app)
 app.secret_key = 'r44uifgstt8o'
@@ -12,7 +12,7 @@ class Blog(db.Model):
 
     id = db.Column(db.Integer, primary_key=True)
     title = db.Column(db.String(120))
-    date = db.Column(db.Date)
+    date = db.Column(db.String(10))
     content = db.Column(db.String(50000))
     owner_id = db.Column(db.Integer, db.ForeignKey('user.id'))
 
@@ -44,11 +44,8 @@ def require_login():
 
 @app.route('/', methods=['POST', 'GET'])
 def index():
-    blogs = Blog.query.all()
-    welcome = "Not logged in"
-    if 'username' in session:
-        welcome = "Logged in as: " + session['username']
-    return render_template('index.html', title="blogz", blogs=blogs, welcome=welcome)
+    users = User.query.all()
+    return render_template('index.html', users=users)
 
 @app.route('/login', methods=['POST', 'GET'])
 def login():
@@ -76,8 +73,10 @@ def signup():
         verify = request.form['verify']
         if not username or not password:
             flash('All fields are required', 'error')
+            return redirect('signup')
         if len(username) < 3 or len(password) < 3:
             flash('Usernames and passwords must contain at least 3 characters', 'error')
+            return redirect('signup')
         if password != verify:
             flash('Passwords must match', 'error')
             return redirect('signup')
@@ -90,6 +89,7 @@ def signup():
             return redirect('/addnew')
         else:
             flash('User already exists', 'error')
+            return redirect('/signup')
     return render_template('signup.html', title="Signup")
 
 @app.route('/addnew', methods=['POST', 'GET'])
@@ -103,21 +103,35 @@ def addnew():
         entry_content = request.form["content"]
         if (not entry_title) or (not entry_content):
             flash("Title and content are required!", 'error')
+            return redirect('/addnew')
         else:
             blog = Blog(entry_title, entry_date, entry_content, owner)
             db.session.add(blog)
             db.session.commit()
+            username = User.query.filter_by(id=blog.owner_id).first()
             return render_template('blog_entry.html', blog=blog)
 
 @app.route('/blog', methods=['GET', 'POST'])
 def blog():
-    entry_id = request.args.get('id')
-    if (entry_id):
-        blog = Blog.query.get(entry_id)
-        return render_template('blog_entry.html', blog=blog)
+    blog_post = Blog.query.all()
+    users = User.query.all()
+    blog_id = request.args.get("id")
+    user_id = request.args.get("user_id")
+    
+    if blog_id:
+        blog_post = Blog.query.filter_by(id=blog_id).all()
+        for blog in blog_post:
+            user_id = blog.owner_id
+            user = User.query.filter_by(id=user_id).first()
+
+        return render_template('blog_entry.html',blog_post=blog_post,user=user)
+    if user_id:
+        user = User.query.filter_by(id=user_id).first()
+        blog_post = Blog.query.filter_by(owner_id=user_id).all()
+        return render_template('individual.html',blog_post=blog_post,user=user)
+
     else:
-        blogs = Blog.query.all()
-        return render_template('blog.html', title="Blog Posts", blogs=blogs)
+        return render_template('blog.html', blog_post=blog_post,users=users)
 
 @app.route('/logout')
 def logout():
